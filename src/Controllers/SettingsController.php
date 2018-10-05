@@ -51,6 +51,8 @@ class SettingsController extends Controller
 
     public function doImport(Request $request, Handler $handler)
     {
+        set_time_limit(0);
+
         $path = $request->get('path');
         $options = $request->get('option', []);
 
