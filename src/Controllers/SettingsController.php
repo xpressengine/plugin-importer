@@ -57,6 +57,11 @@ class SettingsController extends Controller
         $batch = in_array('batch', $options);
         $direct = in_array('direct', $options);
 
+        $importerDirectory = storage_path("app/plugin/importer");
+        if (is_dir($importerDirectory) === false) {
+            \File::makeDirectory($importerDirectory, 0777, true, true);
+        }
+
         $statusBoard = storage_path("app/plugin/importer/operation.json");
 
         // ready, running, successed, failed
