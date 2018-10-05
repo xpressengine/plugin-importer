@@ -14,7 +14,6 @@
 
 namespace Xpressengine\Plugins\Importer\Importers;
 
-use App\Facades\XeUser;
 use Carbon\Carbon;
 use Xpressengine\Plugins\Importer\Exceptions\DuplicateException;
 use Xpressengine\Plugins\Importer\Exceptions\RevisionException;
@@ -24,6 +23,7 @@ use Xpressengine\Plugins\Importer\PasswordManager;
 use Xpressengine\Plugins\Importer\Reader;
 use Xpressengine\Plugins\Importer\XMLElement;
 use Xpressengine\Plugins\Importer\Models\Sync;
+use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserImageHandler;
@@ -308,7 +308,7 @@ class UserImporter extends AbstractImporter
     {
         list($email, $emails) = $this->resolveEmails($info);
 
-        $status = $info->status->activated->decode() === 'true' ? XeUser::STATUS_ACTIVATED : XeUser::STATUS_DENIED;
+        $status = $info->status->activated->decode() === 'true' ? User::STATUS_ACTIVATED : User::STATUS_DENIED;
         $userData = [
             'display_name' => $info->display_name->decode(),
             'email' => $email,
