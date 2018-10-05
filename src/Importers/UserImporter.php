@@ -312,7 +312,7 @@ class UserImporter extends AbstractImporter
         $userData = [
             'display_name' => $info->display_name->decode(),
             'email' => $email,
-            'rating' => Rating::MEMBER,
+            'rating' => Rating::USER,
             'status' => $status,
             'introduction' => $info->introduction->decode(),
             'created_at' => Carbon::createFromFormat(\DateTime::ISO8601, $info->created_at->decode()),
