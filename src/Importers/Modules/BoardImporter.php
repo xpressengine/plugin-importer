@@ -26,6 +26,7 @@ use Xpressengine\Media\Models\Media;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Plugins\Board\Components\Modules\BoardModule;
+use Xpressengine\Plugins\Board\Models\Board;
 use Xpressengine\Plugins\Board\Models\BoardSlug;
 use Xpressengine\Plugins\Importer\Importers\DynamicFieldResolveTrait;
 use Xpressengine\Plugins\Importer\XMLElement;
@@ -588,6 +589,9 @@ class BoardImporter extends AbstractModuleImporter
         $target = $this->sync()->get($target_id);
         $targetId = $target->new_id;
 
+        /** @var Board $targetDocument */
+        $targetDocument = Board::where('id', $targetId)->first();
+
         // get user
         $user = $this->getUser(array_only($info, ['user_id', 'name', 'email']));
 
@@ -595,6 +599,9 @@ class BoardImporter extends AbstractModuleImporter
         $args = [
             'instance_id' => $instance_id,
             'target_id' => $targetId,
+            'target_type' => Board::class,
+            'target_author_id' => $targetDocument->getAuthor()->getId(),
+
             'slug' => array_get($info, 'slug', array_get($info, 'title')),
 
             'dissent_count' => array_get($info, 'dissent_count', 0),
