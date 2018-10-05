@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xe:migration version="1.0">
+    <type>document</type>
+    <app version="1.8.41">xpressengine1</app>
+    <config>
+    </config>
+
+    <!-- REQUIRED -->
+    <modules>
+        <!-- type: 임시. 모듈 종류. -->
+        <module type="board">
+            <!-- REQUIRED. STRING -->
+            <id>urn:xe:migrate:module:{{ID}}</id>
+            <url>{{MID}}</url>
+            <title xml:lang="ko"></title>
+        </module>
+    </modules>
+
+    <!-- OPTIONAL -->
+    <categories>
+        <category>
+            <!-- REQUIRED. STRING -->
+            <id>urn:xe:migrate:category:{{ID}}</id>
+            <module_id>urn:xe:migrate:module:{{ID}}</module_id>
+            <name xml:lang="ko">{{카테고리명}}</name> <!-- xml:lang: ko, en, ... -->
+
+            <!-- OPTIONAL -->
+            <parent_id>urn:xe:migrate:category:{{ID}}</parent_id>
+        </category>
+    </categories>
+
+    <!-- OPTIONAL. 확장 필드 -->
+    <fields>
+        <field>
+            <!-- REQUIRED. STRING -->
+            <id>urn:xe:migrate:document-field:{{ID}}</id>
+            <module_id>urn:xe:migrate:module:{{ID}}</module_id>
+            <name>{{name}}</name> <!-- 영문 Key -->
+            <title xml:lang="ko">{{필드명}}</title> <!-- xml:lang: ko, en, ... -->
+            <type>{{text,number,select,mutiple,boolean,phone,address}}</type>
+            <required>{{true|false}}</required>
+
+            <!-- OPTIONAL. STRING. select, mutiple 일 때 항목 -->
+            <set>item1,item2,...</set>
+        </field>
+    </fields>
+
+    <!-- REQUIRED. 문서 목록 -->
+    <documents>
+        <document>
+            <!-- REQUIRED. STRING -->
+            <id>urn:xe:migrate:document:{{id}}</id>
+            <module_id>urn:xe:migrate:module:{{ID}}</module_id> <!-- documents.instanceId -->
+
+            <!-- OPTIONAL. STRING -->
+            <parent_id>urn:xe:migrate:document:{{id}}</parent_id> <!-- documents.parent_id -->
+            <!-- 댓글일 경우 대상 문서 -->
+            <target_id>urn:xe:migrate:document:{{id}}</target_id> <!-- documents.parent_id -->
+
+            <!-- REQUIRED. STRING. comment|document -->
+            <type>{{document|comment}}</type> <!-- documents.type -->
+            <!-- OPTIONAL. STRING. ko|en|... -->
+            <locale>{{locale}}</locale> <!-- documents.locale -->
+            <!-- OPTIONAL. STRING. 댓글은 제목이 있거나 없을 수 있음 -->
+            <title>{{제목}}</title> <!-- documents.title -->
+
+            <!-- REQUIRE. STRING -->
+            <content format="text|html">{{내용}}</content> <!-- documents.content. format: documents.fotmat -->
+
+            <!-- OPTIONAL. INTEGER -->
+            <read_count>{{조회수}}</read_count> <!-- documents.readCount -->
+            <assent_count>{{추천수}}</assent_count> <!-- documents.assentCount -->
+            <dissent_count>{{비추천수}}</dissent_count> <!-- documents.dissentCount -->
+            <comment_count>{{댓글수}}</comment_count> <!-- documents.commentCount
+
+            <!-- OPTIONAL. STRING -->
+            <!-- ex) document-출력-포맷임 -->
+            <slug>{{slug}}</slug> <!-- board_slug.slug -->
+
+            <!-- REQUIRED. STRING. 글 작성자의 유형-->
+            <!-- guest|anonymity|normal|user -->
+            <user_type>{{USER_TYPE}}</user_type> <!-- documents.userType -->
+
+            <!-- OPTIONAL. STRING -->
+            <!-- user_type != user 일 때는 없을 수 있음... -->
+            <user_id>urn:xe:migrate:user:{{ID}}</user_id>
+
+            <!-- REQUIRED. STRING -->
+            <name>{{작성자이름}}</name> <!-- documents.writer -->
+            <email>{{이메일주소}}</email> <!-- documents.email -->
+            <certify_key hash_function="plaintext,md5,pbkdf2,..." salt="">{{password}}</certify_key> <!-- documents.certifyKey -->
+
+            <!-- OPTIONAL. STRING -->
+            <ipaddress>{{IP}}</ipaddress> <!-- documents.ipaddress -->
+
+            <!-- OPTIONAL. BOOLEAN -->
+            <!-- 댓글 작성 허용 -->
+            <allow_comment>{{true/false}}</allow_comment> <!-- board_data.allowComment -->
+            <!-- 댓글 등 알림 기능 사용 -->
+            <use_alarm>{{true/false}}</use_alarm> <!-- board_data.useAlarm -->
+
+            <!-- REQUIRED. STRING. ISO 8601(Y-m-d\TH:i:sP) -->
+            <created_at>{{작성일}}</created_at> <!-- documents.created_at -->
+            <updated_at>{{수정일}}</updated_at> <!-- documents.updated_at -->
+
+            <!-- OPTIONAL. STRING. ISO 8601(Y-m-d\TH:i:sP -->
+            <published_at>{{발행일}}</published_at> <!-- documents.publishedAt -->
+            <deleted_at>{{삭제일}}</deleted_at> <!-- documents.deletedAt -->
+
+            <!-- REQUIRED. STIRNG -->
+            <!-- trash|temp|private|public|notice -->
+            <status>{{status}}</status> <!-- documents.status -->
+            <!-- rejected|waiting|approved -->
+            <approved></approved> <!-- documents.approved -->
+            <!-- hidden|secret|visible -->
+            <display></display> <!-- documents.display -->
+            <!-- rejected|waiting|reserved|published -->
+            <published></published> <!-- documents.published -->
+
+            <!-- OPTIONAL -->
+            <categories>
+                <!-- REQUIRED. MULTIPLE -->
+                <category>urn:xe:migrate:category:{{ID}}</category>
+            </categories>
+
+            <!-- OPTIONAL -->
+            <tags>
+                <!-- REQUIRED. MULTIPLE -->
+                <tag>고양이</tag>
+            </tags>
+
+            <!-- 추천, 비추천, 신고, 스크랩 -->
+            <!-- 중복 방지를 위한 데이터 -->
+            <!-- OPTIONAL -->
+            <logs>
+                <log>
+                    <!-- REQUIRED -->
+                    <user_id>urn:xe:migrate:user:{{ID}}</user_id>
+                    <type>{{assent|dissent|claim|favorit}}</type>
+
+                    <!-- OPTIONAL -->
+                    <created_at>{{ISO 8601}}</created_at>
+                    <ipaddress>{{IP}}</ipaddress>
+                    <!-- 신고 시 메시지 -->
+                    <message>{{STRING}}</message>
+                </log>
+            </logs>
+
+            <!-- 다이나믹 필드 -->
+            <!-- 카테고리는 별도 -->
+            <!-- OPTIONAL -->
+            <fields>
+                <field>
+                    <!-- REQUIRED. STRING -->
+                    <id>urn:xe:migrate:document-field:{{ID}}</id>
+                    <!-- OPTIONAL -->
+                    <!-- 값이 없는 경우가 있음 -->
+                    <value></value>
+                </field>
+            </fields>
+
+            <!-- OPTIONAL -->
+            <attaches count="{{INT}}">
+                <attach>
+                    <!-- REQUIRED. STRING -->
+                    <id>urn:xe:migrate:file:{{ID}}</id>
+                    <filename>{{파일명}}</filename> <!-- files.clientname -->
+
+                    <!-- OPTIONAL. INTEGER -->
+                    <!-- byte -->
+                    <filesize>{{파일크기}}</filesize> <!-- files.size -->
+                    <download_count>{{다운로드횟수}}</download_count> <!-- files.donwloadCount -->
+                    <!-- REQUIRED -->
+                    <file>
+                        <!-- MULTIPLE -->
+                        <buff></buff>
+                    </file>
+                    <!-- OPTIONAL. STRING. ISO 8601(Y-m-d\TH:i:sP) -->
+                    <created_at></created_at> <!-- files.created_at -->
+                    <updated_at></updated_at> <!-- files.updated_at -->
+
+                    <!-- OPTIONAL. STRING -->
+                    <author>urn:xe:migrate:user:{{ID}}</author> <!-- files.userId -->
+                </attach>
+            </attaches>
+        </document>
+    </documents>
+</xe:migration>
