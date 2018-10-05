@@ -427,7 +427,9 @@ class BoardImporter extends AbstractModuleImporter
             'ipaddress' => array_get($info, 'ipaddress'),
 
             'allow_comment' => array_get($info, 'allow_comment', false) ? '1' : '0',
-            'use_alarm' => array_get($info, 'use_alarm', false) ? '1' : '0',
+
+//            'use_alarm' => array_get($info, 'use_alarm', false) ? '1' : '0',
+            'use_alarm' => false,
 
             '_hashTags' => [],
 
@@ -613,7 +615,9 @@ class BoardImporter extends AbstractModuleImporter
             'ipaddress' => array_get($info, 'ipaddress'),
 
             'allow_comment' => array_get($info, 'allow_comment', false) ? '1' : '0',
-            'use_alarm' => array_get($info, 'use_alarm', false) ? '1' : '0',
+
+//            'use_alarm' => array_get($info, 'use_alarm', false) ? '1' : '0',
+            'use_alarm' => false,
 
             'created_at' => array_get($info, 'created_at'),
             'updated_at' => array_get($info, 'updated_at'),
