@@ -14,7 +14,7 @@
 
 namespace Xpressengine\Plugins\Importer\Importers\Modules;
 
-use Carbon\Carbon; 
+use Carbon\Carbon;
 use XeMedia;
 use XeStorage;
 use Xpressengine\Category\Models\CategoryItem;
@@ -29,6 +29,7 @@ use Xpressengine\Plugins\Board\Components\Modules\BoardModule;
 use Xpressengine\Plugins\Board\Models\Board;
 use Xpressengine\Plugins\Board\Models\BoardSlug;
 use Xpressengine\Plugins\Importer\Importers\DynamicFieldResolveTrait;
+use Xpressengine\Plugins\Importer\ImporterStorage;
 use Xpressengine\Plugins\Importer\XMLElement;
 use Xpressengine\Storage\FileRepository;
 use Xpressengine\User\Models\Guest;
@@ -50,6 +51,13 @@ class BoardImporter extends AbstractModuleImporter
     use DynamicFieldResolveTrait;
 
     protected static $moduleType = 'board';
+
+    protected $importerStorage;
+
+    public function __construct()
+    {
+        $this->importerStorage = new ImporterStorage();
+    }
 
     /**
      * createModule
@@ -763,8 +771,7 @@ class BoardImporter extends AbstractModuleImporter
                     }
                 }
 
-                // $content, $path, $name, $disk = null, $origin_id = null, $user = null
-                $file = XeStorage::create(
+                $file = $this->importerStorage->create(
                     $attach['buff'],
                     EditorHandler::FILE_UPLOAD_PATH,
                     $attach['filename'],
@@ -890,4 +897,10 @@ class BoardImporter extends AbstractModuleImporter
         return $user;
     }
 
+    private function importerStorageCreate($content, $path, $name, $disk = null, $originId = null, $user = null)
+    {
+        $fileRepo = new FileRepository();
+
+
+    }
 }
