@@ -191,7 +191,7 @@ class Handler
                         }
 
                         if (strpos($str, '<revision>') !== false) {
-                            $type = substr($str, 10, /*lenth of </revision>*/ -11);
+                            $revision = substr($str, 10, /*lenth of </revision>*/ -11);
                             break;
                         }
                     }
