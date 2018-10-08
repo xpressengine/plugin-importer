@@ -8,7 +8,8 @@
 
                         @if($operation['status'] !== 'running')
                             <div class="pull-right">
-                                <form action="{{ route('importer::operation.delete') }}" method="delete" data-submit="xe-ajax" data-callback="deleteImportOperation">
+                                <form action="{{ route('importer::operation.delete') }}" method="post" data-submit="xe-ajax" data-callback="deleteImportOperation">
+                                    {!! csrf_field() !!}
                                     <button class="btn-link" type="submit">내역 삭제</button>
                                 </form>
                             </div>

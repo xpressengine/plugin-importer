@@ -121,11 +121,11 @@ class Plugin extends AbstractPlugin
                     ]
                 );
 
-                Route::delete(
-                    '/',
+                Route::post(
+                    '/operation/delete',
                     [
                         'as' => 'importer::operation.delete',
-                        'uses' => '\Xpressengine\Plugins\Importer\Controllers\SettingsController@doImport'
+                        'uses' => '\Xpressengine\Plugins\Importer\Controllers\SettingsController@deleteOperation'
                     ]
                 );
             }

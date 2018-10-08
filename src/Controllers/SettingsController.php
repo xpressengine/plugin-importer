@@ -118,7 +118,7 @@ class SettingsController extends Controller
         if (file_exists($statusBoard)) {
             unlink($statusBoard);
         }
-        return app('xe.presenter')->makeApi(['']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '작업 내역이 삭제되었습니다.']);
     }
 
 }
