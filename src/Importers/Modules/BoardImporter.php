@@ -610,7 +610,7 @@ class BoardImporter extends AbstractModuleImporter
             'instance_id' => $instance_id,
             'target_id' => $targetId,
             'target_type' => Board::class,
-            'target_author_id' => $targetDocument->getAuthor()->getId(),
+            'target_author_id' => $user->getId(),
 
             'slug' => array_get($info, 'slug', array_get($info, 'title')),
 
