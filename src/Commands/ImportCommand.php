@@ -16,7 +16,8 @@ class ImportCommand extends Command
                         {path : the path for exported file}
                         {--batch : if path is batch file(containing the list of exported files), use this flag. }
                         {--limit=10 : import size }
-                        {--direct : if path is exporter link, use this option}';
+                        {--direct : if path is exporter link, use this option}
+                        {--y : if want no confirm}';
 
     /**
      * The console command description.
@@ -63,9 +64,11 @@ class ImportCommand extends Command
             $this->batch($fileList, $direct);
         } else {
             // prompt to user
-            if ($this->input->isInteractive() && $this->confirm("Do you want to execute it?") === false) {
-                $this->warn('Process is canceled by you.');
-                return null;
+            if ($this->option('y') === false) {
+                if ($this->input->isInteractive() && $this->confirm("Do you want to execute it?") === false) {
+                    $this->warn('Process is canceled by you.');
+                    return null;
+                }
             }
             $this->import($file, $direct);
         }
@@ -77,9 +80,11 @@ class ImportCommand extends Command
         $this->output->writeln("The $count batch job will be executed.".PHP_EOL);
 
         // prompt to user
-        if ($this->input->isInteractive() && $this->confirm("Do you want to execute it?") === false) {
-            $this->warn('Process is canceled by you.');
-            return null;
+        if ($this->option('y') === false) {
+            if ($this->input->isInteractive() && $this->confirm("Do you want to execute it?") === false) {
+                $this->warn('Process is canceled by you.');
+                return null;
+            }
         }
 
         $successed = 0;
