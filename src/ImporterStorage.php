@@ -6,6 +6,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Xpressengine\Storage\Exceptions\WritingFailException;
 use Xpressengine\Storage\FileRepository;
 use Xpressengine\Storage\FilesystemHandler;
+use Xpressengine\Storage\MimeFilter;
 use Xpressengine\Storage\RoundRobinDistributor;
 use Xpressengine\Storage\Storage;
 use Xpressengine\User\UserInterface;
@@ -23,12 +24,20 @@ class ImporterStorage extends Storage
         $keygen = $app['xe.keygen'];
         $tempFiles = $app['xe.storage.temp'];
         $response = $app[ResponseFactory::class];
+        $mimeFilter = new MimeFilter($app['config']['filesystems']);
 
-        parent::__construct($repo, $files, $auth, $keygen, $distributor, $tempFiles, $response);
+        parent::__construct($repo, $files, $auth, $keygen, $distributor, $tempFiles, $response, $mimeFilter);
     }
 
-    public function create($content, $path, $clientFileName, $disk = null, $originId = null, UserInterface $user = null)
-    {
+    public function create(
+        $content,
+        $path,
+        $clientFileName,
+        $disk = null,
+        $originId = null,
+        UserInterface $user = null,
+        $option = []
+    ) {
         $id = $this->keygen->generate();
         $path = $this->makePath($id, $path);
 
