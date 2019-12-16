@@ -120,5 +120,4 @@ class SettingsController extends Controller
         }
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '작업 내역이 삭제되었습니다.']);
     }
-
 }
