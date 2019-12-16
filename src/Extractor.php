@@ -148,12 +148,11 @@ class Extractor
      */
     public function begin($cachePath)
     {
-
         // working directory 지정
-        $this->workingDir = $cachePath."/".$this->dir;
+        $this->workingDir = $cachePath . '/' . $this->dir;
 
         // 인덱스 파일 경로 지정
-        $this->indexFile = $this->workingDir.'/index';
+        $this->indexFile = $this->workingDir . '/index';
 
         // 캐싱 디렉토리 초기화
         if (!is_dir($this->workingDir)) {
@@ -164,7 +163,7 @@ class Extractor
         File::delete($this->indexFile);
 
         // index 파일 및 포인터 준비
-        $this->index_fd = fopen($this->indexFile, "a");
+        $this->index_fd = fopen($this->indexFile, 'a');
     }
 
     public function read($str)

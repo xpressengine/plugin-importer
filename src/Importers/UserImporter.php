@@ -151,6 +151,13 @@ class UserImporter extends AbstractImporter
             }
         );
 
+        $validator->extend(
+            'login_id',
+            function ($attribute, $value, $parameters) {
+                return true;
+            }
+        );
+
         $groups = $this->sync()->fetch('urn:xe:migrate:user-group:');
 
         foreach ($groups as $sync) {
@@ -311,6 +318,7 @@ class UserImporter extends AbstractImporter
         $status = $info->status->activated->decode() === 'true' ? User::STATUS_ACTIVATED : User::STATUS_DENIED;
         $userData = [
             'display_name' => $info->display_name->decode(),
+            'login_id' => explode('@', $email)[0],
             'email' => $email,
             'rating' => Rating::USER,
             'status' => $status,
@@ -350,9 +358,15 @@ class UserImporter extends AbstractImporter
             static::$handler->countUpdated();
         } else {
             // 회원 생성
-            if(app('xe.users')->where(['display_name' => $userData['display_name']])->first() !== null) {
+            if (app('xe.users')->where(['display_name' => $userData['display_name']])->first() !== null) {
                 $userData['display_name'] = implode([$userData['display_name'], str_random(5)], '-');
             }
+
+            //login_id가 겹칠 경우 랜덤 생성
+            if (app('xe.users')->where(['login_id' => $userData['login_id']])->first() !== null) {
+                $userData['login_id'] .= str_random(5);
+            }
+
             $user = $this->userHandler->create($userData);
         }
 

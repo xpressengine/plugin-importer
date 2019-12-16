@@ -12,7 +12,7 @@ class ImportCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'importer:import 
+    protected $signature = 'importer:import
                         {path : the path for exported file}
                         {--batch : if path is batch file(containing the list of exported files), use this flag. }
                         {--limit=10 : import size }
@@ -50,7 +50,6 @@ class ImportCommand extends Command
     public function handle()
     {
         \Artisan::call('cache:clear');
-        \Artisan::call('cache:clear-xe');
 
         $file = $this->argument('path');
 
@@ -106,11 +105,10 @@ class ImportCommand extends Command
 
         $now = Carbon::now();
         $this->output->success("[{$now->format('Y.m.d H:i:s')}] $successed items ware imported.");
-
     }
 
-    protected function import($file, $direct, $quiet = false) {
-
+    protected function import($file, $direct, $quiet = false)
+    {
         $limit = $this->option('limit');
 
         // check

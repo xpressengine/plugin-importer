@@ -53,7 +53,6 @@ class RollbackCommand extends Command
      */
     public function handle()
     {
-        \Artisan::call('cache:clear-xe');
         \Artisan::call('cache:clear');
 
         app('files')->delete(storage_path('app/plugin/importer/operation.json'));
