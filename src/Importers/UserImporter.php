@@ -318,7 +318,7 @@ class UserImporter extends AbstractImporter
         $status = $info->status->activated->decode() === 'true' ? User::STATUS_ACTIVATED : User::STATUS_DENIED;
         $userData = [
             'display_name' => $info->display_name->decode(),
-            'login_id' => explode('@', $email)[0],
+            'login_id' => $info->login_id->decode(),
             'email' => $email,
             'rating' => Rating::USER,
             'status' => $status,
@@ -353,7 +353,7 @@ class UserImporter extends AbstractImporter
         $fieldData = $this->resolveFields($info->fields);
         $userData = array_merge($userData, $fieldData);
 
-        if($updatable) {
+        if ($updatable) {
             $user = $this->userHandler->find($synced->new_id);
             static::$handler->countUpdated();
         } else {
@@ -362,10 +362,19 @@ class UserImporter extends AbstractImporter
                 $userData['display_name'] = implode([$userData['display_name'], str_random(5)], '-');
             }
 
-            //login_id가 겹칠 경우 랜덤 생성
-            if (app('xe.users')->where(['login_id' => $userData['login_id']])->first() !== null) {
-                $userData['login_id'] .= str_random(5);
+            $loginId = $userData['login_id'];
+            $loginIdLength = strlen($loginId);
+            if ($loginIdLength < 5 || $loginIdLength > 20 ||
+                preg_match('/[a-z0-9][a-z0-9-_][a-z0-9-_][a-z0-9-_]+[a-z0-9]+/', $loginId) == false
+            ) {
+                $loginId = explode('@', $userData['email'])[0];
             }
+
+            if (app('xe.users')->where(['login_id' => $loginId])->first() !== null) {
+                $loginId .= str_random(5);
+            }
+
+            $userData['login_id'] = $loginId;
 
             $user = $this->userHandler->create($userData);
         }
