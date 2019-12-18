@@ -263,45 +263,9 @@ class UserImporter extends AbstractImporter
             }
         }
 
-        $title = $info->title->decode();
+        $typeInfo = $this->typeInfo($info->type->decode());
 
-        \DB::beginTransaction();
-        try {
-            $label = app('xe.translator')->genUserKey();
-            app('xe.translator')->save($label, 'ko', $title, false);
-
-            $typeInfo = $this->typeInfo($info->type->decode());
-
-            $inputs = [
-                'group' => 'user',
-                'id' => $info->name->decode(),
-                'typeId' => $typeInfo['type'],
-                'skinId' => $typeInfo['skin'],
-                'label' => $label,
-                'required' => $info->required->decode(),
-                'use' => 'true',
-                'sortable' => 'true',
-                'searchable' => 'true',
-            ];
-
-            $register = $handler->getRegisterHandler();
-            $configHandler = $handler->getConfigHandler();
-
-            $config = $configHandler->getDefault();
-            foreach ($inputs as $name => $value) {
-                $config->set($name, $value);
-            }
-
-            $handler->setConnection(\XeDB::connection());
-            $handler->create($config);
-
-            $id = $config->get('id');
-            $this->sync($origin_id, 'user.'.$id);
-        } catch (\Exception $e) {
-            \DB::rollBack();
-            throw $e;
-        }
-        \DB::commit();
+        $this->createField($info, $typeInfo);
     }
 
     /**

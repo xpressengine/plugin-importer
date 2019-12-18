@@ -93,4 +93,14 @@ class Synchronizer
     {
         return Sync::where('origin_id', 'like', $prefix.'%')->get();
     }
+
+    /**
+     * get query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery()
+    {
+        return Sync::query();
+    }
 }
