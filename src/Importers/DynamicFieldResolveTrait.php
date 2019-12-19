@@ -69,7 +69,7 @@ trait DynamicFieldResolveTrait
         return $fieldDatas;
     }
 
-    protected function createField(XMLElement $info, $typeInfo)
+    protected function createField(XMLElement $info, $typeInfo, $group)
     {
         $handler = app('xe.dynamicField');
 
@@ -83,7 +83,7 @@ trait DynamicFieldResolveTrait
             app('xe.translator')->save($label, 'ko', $title, false);
 
             $inputs = [
-                'group' => 'user',
+                'group' => $group,
                 'id' => $info->name->decode(),
                 'typeId' => $typeInfo['type'],
                 'skinId' => $typeInfo['skin'],
@@ -109,7 +109,7 @@ trait DynamicFieldResolveTrait
 
             $id = $config->get('id');
 
-            $this->sync($origin_id, 'user.' . $id, $additionalInputs);
+            $this->sync($origin_id, $group . '.' . $id, $additionalInputs);
         } catch (\Exception $e) {
             \DB::rollBack();
             throw $e;

@@ -265,7 +265,7 @@ class UserImporter extends AbstractImporter
 
         $typeInfo = $this->typeInfo($info->type->decode());
 
-        $this->createField($info, $typeInfo);
+        $this->createField($info, $typeInfo, 'user');
     }
 
     /**
