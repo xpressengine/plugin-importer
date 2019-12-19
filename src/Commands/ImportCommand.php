@@ -71,6 +71,8 @@ class ImportCommand extends Command
             }
             $this->import($file, $direct);
         }
+
+        \Artisan::call('cache:clear');
     }
 
     protected function batch($fileList, $direct)
@@ -164,5 +166,4 @@ class ImportCommand extends Command
 
         return compact('successed', 'failed', 'updated', 'alreadyUpdated');
     }
-
 }
