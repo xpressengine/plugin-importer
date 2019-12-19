@@ -71,11 +71,11 @@ abstract class AbstractModuleImporter
     /**
      * createField
      *
-     * @param array $info
+     * @param XMLElement $info
      *
      * @return mixed
      */
-    abstract public function createField(array $info);
+    abstract public function createField(XMLElement $info);
 
     /**
      * import
@@ -99,6 +99,4 @@ abstract class AbstractModuleImporter
     {
         return static::$documentImporter->sync($origin_id, $new_id, $data);
     }
-
-
 }

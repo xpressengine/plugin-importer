@@ -37,7 +37,6 @@ use Xpressengine\Plugins\Importer\Models\Sync;
  */
 class DocumentImporter extends AbstractImporter
 {
-
     protected static $type = 'document';
 
     protected $moduleImporters = [];
@@ -176,27 +175,19 @@ class DocumentImporter extends AbstractImporter
      */
     protected function importField(XMLElement $info)
     {
-        // $info 정리후, moduleImporter를 찾고, moduleImporter의 createField를 호출
-        $id = $info->id->decode();
         $module_id = $info->module_id->decode();
-        $name = $info->name->decode();
-        $title = $info->title->decode();
-        $type = $info->type->decode();
-        $required = $info->required->decode();
-        $set = $info->set->decode();
 
         // field를 등록할 module 검색
         $sync = $this->sync()->get($module_id);
         if ($sync) {
             $module = $sync->data['module'];
-            $module_id = $sync->new_id;
             $moduleImporter = $this->getModuleImporter($module);
-            $moduleImporter->createField(compact('id', 'module_id', 'name', 'type', 'required', 'set', 'title'));
+            $info->module_id = base64_encode($sync->new_id);
+            $moduleImporter->createField($info);
         } else {
             throw new \Exception("module[$module_id] not found");
         }
     }
-
 
     /**
      * importCategories
@@ -240,8 +231,6 @@ class DocumentImporter extends AbstractImporter
         $moduleImporter = $this->getModuleImporter($module);
         $categoryItem = $moduleImporter->createCategory(compact('id', 'module_id', 'title', 'created_at'));
     }
-
-
 
     /**
      * import
@@ -375,5 +364,4 @@ class DocumentImporter extends AbstractImporter
     {
         return array_get($this->moduleImporters, $module);
     }
-
 }

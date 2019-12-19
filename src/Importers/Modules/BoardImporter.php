@@ -48,7 +48,9 @@ use Xpressengine\Plugins\Comment\Models\Comment;
  */
 class BoardImporter extends AbstractModuleImporter
 {
-    use DynamicFieldResolveTrait;
+    use DynamicFieldResolveTrait {
+        createField as traitCreateField;
+    }
 
     protected static $moduleType = 'board';
 
@@ -189,7 +191,7 @@ class BoardImporter extends AbstractModuleImporter
         $word = app('xe.translator')->genUserKey();
         app('xe.translator')->save($word, 'ko', $info['title'], false);
         $description = '';
-        
+
         // create item
         \DB::beginTransaction();
 
@@ -205,11 +207,11 @@ class BoardImporter extends AbstractModuleImporter
         return $item;
     }
 
-    public function createField(array $info)
+    public function createField(XMLElement $info)
     {
         $handler = app('xe.dynamicField');
 
-        $origin_id = $info['id'];
+        $origin_id = $info->id->decode();
 
         // check sync
         $synced = $this->sync()->get($origin_id);
@@ -222,47 +224,12 @@ class BoardImporter extends AbstractModuleImporter
             }
         }
 
-        $title = $info['title'];
-
-        $config = app('xe.board.config')->get($info['module_id']);
+        $config = app('xe.board.config')->get($info->module_id->decode());
         $group = $config->get('documentGroup');
 
-        \DB::beginTransaction();
-        try {
-            $label = app('xe.translator')->genUserKey();
-            app('xe.translator')->save($label, 'ko', $title, false);
+        $typeInfo = $this->typeInfo($info->type->decode());
 
-            $typeInfo = $this->typeInfo($info['type']);
-
-            $inputs = [
-                'group' => $group,
-                'id' => $info['name'],
-                'typeId' => $typeInfo['type'],
-                'skinId' => $typeInfo['skin'],
-                'label' => $label,
-                'required' => $info['required'],
-                'use' => 'true',
-                'sortable' => 'true',
-                'searchable' => 'true',
-            ];
-
-            $configHandler = $handler->getConfigHandler();
-
-            $config = $configHandler->getDefault();
-            foreach ($inputs as $name => $value) {
-                $config->set($name, $value);
-            }
-
-            $handler->setConnection(\XeDB::connection());
-            $handler->create($config);
-
-            $id = $config->get('id');
-            $this->sync($origin_id, $group.'.'.$id);
-        } catch (\Exception $e) {
-            \DB::rollBack();
-            throw $e;
-        }
-        \DB::commit();
+        $this->traitCreateField($info, $typeInfo, $group);
     }
 
     /**
