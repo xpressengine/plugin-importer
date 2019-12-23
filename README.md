@@ -24,7 +24,7 @@
     - 일괄 import : 조회한 데이터를 모두 Import 하려면 CURL config 파일을 대상으로 작업
     - 분할 import : 조회한 데이터 중 분할 된 데이터를 import 하려면 CURL config 하단에 분할 파일을 대상으로 작업
 
-![screenshots/migratino_data_list.png](screenshots/migratino_data_list.png)
+![screenshots/migration_data_list.png](screenshots/migration_data_list.png)
 
 ## Data Import
 
