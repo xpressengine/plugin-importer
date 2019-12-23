@@ -8,7 +8,7 @@
     "import"
   ],
   "license": "LGPL-2.1",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "type": "xpressengine-plugin",
   "support": {
     "email": "developers@xpressengine.com"
@@ -24,10 +24,12 @@
   "extra": {
     "xpressengine": {
       "title": "Importer",
+      "icon": "icon.png",
       "component": {}
     }
   },
   "require": {
+    "xpressengine/xpressengine": "~3.0.8"
   },
   "autoload": {
     "psr-4": {
