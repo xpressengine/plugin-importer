@@ -164,6 +164,8 @@ class ImportCommand extends Command
             .($failed === 0 ? "" : "<fg=red>failed: $failed</>")
         );
 
+        $this->handler->dropCacheFolder($cachePath);
+
         return compact('successed', 'failed', 'updated', 'alreadyUpdated');
     }
 }

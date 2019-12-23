@@ -394,4 +394,21 @@ class Handler
         $this->updatedCount = 0;
         $this->alreadyUpdatedCount = 0;
     }
+
+    public function dropCacheFolder($targetFolder)
+    {
+        $childrenItems = scandir($targetFolder);
+        $childrenItems = array_diff($childrenItems, ['.', '..']);
+
+        foreach ($childrenItems as $targetItem) {
+            $targetPath = $targetFolder . DIRECTORY_SEPARATOR . $targetItem;
+            if (is_dir($targetPath) === true) {
+                $this->dropCacheFolder($targetPath);
+            } else {
+                unlink($targetPath);
+            }
+        }
+
+        rmdir($targetFolder);
+    }
 }
