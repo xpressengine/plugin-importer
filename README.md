@@ -8,7 +8,7 @@
 ### XE1 migration 사이트 접속, 데이터 추출
 
 #### 추출할 데이터 선택 (회원정보 / 게시판)
-####게시판은 게시물 라디오 버튼 선택 후 오른쪽 게시판 목록에서 게시판 선택
+#### 게시판은 게시물 라디오 버튼 선택 후 오른쪽 게시판 목록에서 게시판 선택
 
 ![screenshots/migration_export_type.png](screenshots/migration_export_type.png)
 
