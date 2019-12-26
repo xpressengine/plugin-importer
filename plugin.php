@@ -1,5 +1,6 @@
 <?php
 namespace Xpressengine\Plugins\Importer;
+ini_set('memory_limit', '384M');
 
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Database\Schema\Blueprint;
