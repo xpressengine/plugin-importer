@@ -15,6 +15,7 @@
 namespace Xpressengine\Plugins\Importer\Importers;
 
 use Carbon\Carbon;
+use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugins\Importer\Exceptions\DuplicateException;
 use Xpressengine\Plugins\Importer\Exceptions\RevisionException;
 use Xpressengine\Plugins\Importer\Exceptions\AlreadyUpdatedException;
@@ -373,6 +374,16 @@ class UserImporter extends AbstractImporter
 
         $this->userHandler->update($user, $updateData);
         $this->sync($origin_id, $user->id);
+
+
+        /** @var PluginHandler $pluginHandler */
+        $pluginHandler = app('xe.plugin');
+        if ($pluginHandler->isActivated('point')) {
+            $origin_point = $info->point->decode();
+            $pointHandler = app('xe.point.handler');
+            $pointHandler->addUserPoint($user, $origin_point, ['xe1_import' => $origin_point]);
+        }
+
     }
 
     function updatable($user, $data, Sync $synced)
